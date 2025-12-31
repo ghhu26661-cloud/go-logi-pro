@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Tableau de bord", path: "/" },
@@ -35,6 +35,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const location = useLocation();
+  const { signOut } = useAuth();
 
   return (
     <aside
@@ -101,13 +102,13 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
             <Settings className="h-5 w-5 shrink-0" />
             {!collapsed && <span>Paramètres</span>}
           </Link>
-          <Link
-            to="/login"
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-muted transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+          <button
+            onClick={signOut}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-muted transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           >
             <LogOut className="h-5 w-5 shrink-0" />
             {!collapsed && <span>Déconnexion</span>}
-          </Link>
+          </button>
         </div>
       </div>
     </aside>

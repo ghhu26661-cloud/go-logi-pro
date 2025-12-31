@@ -1,4 +1,4 @@
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,12 +10,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AppHeaderProps {
   sidebarCollapsed: boolean;
 }
 
 export function AppHeader({ sidebarCollapsed }: AppHeaderProps) {
+  const { user, signOut } = useAuth();
+
+  const getInitials = () => {
+    if (user?.user_metadata?.full_name) {
+      return user.user_metadata.full_name
+        .split(" ")
+        .map((n: string) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    if (user?.email) {
+      return user.email.slice(0, 2).toUpperCase();
+    }
+    return "U";
+  };
+
+  const getDisplayName = () => {
+    return user?.user_metadata?.full_name || user?.email || "Utilisateur";
+  };
+
   return (
     <header
       className={`fixed right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card px-6 transition-all duration-300 ${
@@ -52,12 +74,12 @@ export function AppHeader({ sidebarCollapsed }: AppHeaderProps) {
             >
               <Avatar className="h-8 w-8">
                 <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
-                  JD
+                  {getInitials()}
                 </AvatarFallback>
               </Avatar>
               <div className="hidden text-left md:block">
-                <p className="text-sm font-medium text-foreground">Jean Dupont</p>
-                <p className="text-xs text-muted-foreground">Administrateur</p>
+                <p className="text-sm font-medium text-foreground">{getDisplayName()}</p>
+                <p className="text-xs text-muted-foreground">Connecté</p>
               </div>
             </Button>
           </DropdownMenuTrigger>
@@ -70,7 +92,8 @@ export function AppHeader({ sidebarCollapsed }: AppHeaderProps) {
             </DropdownMenuItem>
             <DropdownMenuItem>Paramètres</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem onClick={signOut} className="text-destructive">
+              <LogOut className="mr-2 h-4 w-4" />
               Déconnexion
             </DropdownMenuItem>
           </DropdownMenuContent>
