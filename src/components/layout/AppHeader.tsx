@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 interface AppHeaderProps {
   sidebarCollapsed: boolean;
@@ -40,7 +41,7 @@ export function AppHeader({ sidebarCollapsed }: AppHeaderProps) {
 
   return (
     <header
-      className={`fixed right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card px-6 transition-all duration-300 ${
+      className={`fixed right-0 top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card/95 backdrop-blur-sm px-6 transition-all duration-300 ${
         sidebarCollapsed ? "left-20" : "left-64"
       }`}
     >
@@ -54,12 +55,15 @@ export function AppHeader({ sidebarCollapsed }: AppHeaderProps) {
       </div>
 
       {/* Right side */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         {/* Notifications */}
         <Button
           variant="ghost"
           size="icon"
-          className="relative h-10 w-10 text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="relative h-9 w-9 text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <Bell className="h-5 w-5" />
           <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />

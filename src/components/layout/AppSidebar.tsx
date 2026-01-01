@@ -26,7 +26,7 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { icon: LayoutDashboard, label: "Tableau de bord", path: "/", roles: ["admin", "manager", "chauffeur", "client"] },
+  { icon: LayoutDashboard, label: "Tableau de bord", path: "/dashboard", roles: ["admin", "manager", "chauffeur", "client"] },
   { icon: Users, label: "Clients", path: "/clients", roles: ["admin", "manager"] },
   { icon: Package, label: "Commandes", path: "/orders", roles: ["admin", "manager"] },
   { icon: Truck, label: "Livraisons", path: "/deliveries", roles: ["admin", "manager"] },
