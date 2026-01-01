@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { Boxes, Eye, EyeOff, Mail, Lock, ArrowRight, User, Loader2 } from "lucide-react";
+import { Boxes, Eye, EyeOff, Mail, Lock, ArrowRight, User, Loader2, Building2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { z } from "zod";
 
@@ -14,7 +15,10 @@ const loginSchema = z.object({
 
 const signUpSchema = loginSchema.extend({
   fullName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
+  role: z.enum(["client", "chauffeur"]),
 });
+
+type UserRole = "client" | "chauffeur";
 
 export default function Auth() {
   const { user, signIn, signUp, loading } = useAuth();
@@ -25,6 +29,7 @@ export default function Auth() {
     email: "",
     password: "",
     fullName: "",
+    role: "client" as UserRole,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -66,7 +71,7 @@ export default function Auth() {
     if (isLogin) {
       await signIn(formData.email, formData.password);
     } else {
-      await signUp(formData.email, formData.password, formData.fullName);
+      await signUp(formData.email, formData.password, formData.fullName, formData.role);
     }
     
     setIsSubmitting(false);
@@ -125,6 +130,39 @@ export default function Auth() {
                 </div>
                 {errors.fullName && (
                   <p className="text-sm text-destructive">{errors.fullName}</p>
+                )}
+              </div>
+            )}
+
+            {!isLogin && (
+              <div className="space-y-2">
+                <Label htmlFor="role" className="text-sm font-medium text-foreground">
+                  Type de compte
+                </Label>
+                <Select
+                  value={formData.role}
+                  onValueChange={(value) => handleInputChange("role", value)}
+                >
+                  <SelectTrigger className="h-12">
+                    <SelectValue placeholder="Choisir un type de compte" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="client">
+                      <div className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4" />
+                        <span>Client - Je veux expédier des colis</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="chauffeur">
+                      <div className="flex items-center gap-2">
+                        <Truck className="h-4 w-4" />
+                        <span>Chauffeur - Je veux effectuer des livraisons</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.role && (
+                  <p className="text-sm text-destructive">{errors.role}</p>
                 )}
               </div>
             )}
@@ -218,7 +256,7 @@ export default function Auth() {
               onClick={() => {
                 setIsLogin(!isLogin);
                 setErrors({});
-                setFormData({ email: "", password: "", fullName: "" });
+                setFormData({ email: "", password: "", fullName: "", role: "client" });
               }}
               className="font-medium text-primary hover:underline"
             >

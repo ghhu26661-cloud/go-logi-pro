@@ -14,6 +14,208 @@ export type Database = {
   }
   public: {
     Tables: {
+      chauffeur_salaries: {
+        Row: {
+          base_salary: number
+          bonus: number | null
+          chauffeur_id: string
+          created_at: string
+          deductions: number | null
+          id: string
+          month: number
+          paid: boolean | null
+          paid_at: string | null
+          total_deliveries: number | null
+          total_km: number | null
+          year: number
+        }
+        Insert: {
+          base_salary?: number
+          bonus?: number | null
+          chauffeur_id: string
+          created_at?: string
+          deductions?: number | null
+          id?: string
+          month: number
+          paid?: boolean | null
+          paid_at?: string | null
+          total_deliveries?: number | null
+          total_km?: number | null
+          year: number
+        }
+        Update: {
+          base_salary?: number
+          bonus?: number | null
+          chauffeur_id?: string
+          created_at?: string
+          deductions?: number | null
+          id?: string
+          month?: number
+          paid?: boolean | null
+          paid_at?: string | null
+          total_deliveries?: number | null
+          total_km?: number | null
+          year?: number
+        }
+        Relationships: []
+      }
+      clients: {
+        Row: {
+          address: string | null
+          city: string | null
+          company_name: string | null
+          contact_name: string
+          created_at: string
+          email: string
+          id: string
+          phone: string | null
+          postal_code: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          company_name?: string | null
+          contact_name: string
+          created_at?: string
+          email: string
+          id?: string
+          phone?: string | null
+          postal_code?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          company_name?: string | null
+          contact_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          phone?: string | null
+          postal_code?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      deliveries: {
+        Row: {
+          chauffeur_id: string
+          completed_at: string | null
+          created_at: string
+          distance_km: number | null
+          end_time: string | null
+          id: string
+          notes: string | null
+          order_id: string
+          scheduled_date: string
+          start_time: string | null
+          status: string
+          updated_at: string
+          vehicle_id: string | null
+        }
+        Insert: {
+          chauffeur_id: string
+          completed_at?: string | null
+          created_at?: string
+          distance_km?: number | null
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          order_id: string
+          scheduled_date: string
+          start_time?: string | null
+          status?: string
+          updated_at?: string
+          vehicle_id?: string | null
+        }
+        Update: {
+          chauffeur_id?: string
+          completed_at?: string | null
+          created_at?: string
+          distance_km?: number | null
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string
+          scheduled_date?: string
+          start_time?: string | null
+          status?: string
+          updated_at?: string
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deliveries_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          client_id: string
+          created_at: string
+          delivery_address: string
+          delivery_date: string | null
+          id: string
+          notes: string | null
+          order_number: string
+          pickup_address: string
+          pickup_date: string | null
+          price: number | null
+          status: string
+          updated_at: string
+          volume_m3: number | null
+          weight_kg: number | null
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          delivery_address: string
+          delivery_date?: string | null
+          id?: string
+          notes?: string | null
+          order_number?: string
+          pickup_address: string
+          pickup_date?: string | null
+          price?: number | null
+          status?: string
+          updated_at?: string
+          volume_m3?: number | null
+          weight_kg?: number | null
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          delivery_address?: string
+          delivery_date?: string | null
+          id?: string
+          notes?: string | null
+          order_number?: string
+          pickup_address?: string
+          pickup_date?: string | null
+          price?: number | null
+          status?: string
+          updated_at?: string
+          volume_m3?: number | null
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
