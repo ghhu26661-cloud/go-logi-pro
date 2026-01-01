@@ -16,16 +16,24 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole, AppRole } from "@/hooks/useUserRole";
 
-const menuItems = [
-  { icon: LayoutDashboard, label: "Tableau de bord", path: "/" },
-  { icon: Users, label: "Clients", path: "/clients" },
-  { icon: Package, label: "Commandes", path: "/orders" },
-  { icon: Truck, label: "Livraisons", path: "/deliveries" },
-  { icon: UserCog, label: "Chauffeurs", path: "/drivers" },
-  { icon: Car, label: "Véhicules", path: "/vehicles" },
-  { icon: FileText, label: "Factures", path: "/invoices" },
-  { icon: Users, label: "Utilisateurs", path: "/users" },
+interface MenuItem {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  path: string;
+  roles: AppRole[];
+}
+
+const menuItems: MenuItem[] = [
+  { icon: LayoutDashboard, label: "Tableau de bord", path: "/", roles: ["admin", "manager", "chauffeur", "client"] },
+  { icon: Users, label: "Clients", path: "/clients", roles: ["admin", "manager"] },
+  { icon: Package, label: "Commandes", path: "/orders", roles: ["admin", "manager"] },
+  { icon: Truck, label: "Livraisons", path: "/deliveries", roles: ["admin", "manager"] },
+  { icon: UserCog, label: "Chauffeurs", path: "/drivers", roles: ["admin", "manager"] },
+  { icon: Car, label: "Véhicules", path: "/vehicles", roles: ["admin", "manager"] },
+  { icon: FileText, label: "Factures", path: "/invoices", roles: ["admin", "manager"] },
+  { icon: Users, label: "Utilisateurs", path: "/users", roles: ["admin"] },
 ];
 
 interface AppSidebarProps {
@@ -36,6 +44,12 @@ interface AppSidebarProps {
 export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const location = useLocation();
   const { signOut } = useAuth();
+  const { role } = useUserRole();
+
+  // Filter menu items based on user role
+  const filteredMenuItems = menuItems.filter(
+    (item) => role && item.roles.includes(role)
+  );
 
   return (
     <aside
@@ -73,7 +87,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
 
         {/* Navigation */}
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-          {menuItems.map((item) => {
+          {filteredMenuItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <Link
@@ -95,13 +109,6 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
 
         {/* Footer */}
         <div className="border-t border-sidebar-border p-3">
-          <Link
-            to="/settings"
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-muted transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-          >
-            <Settings className="h-5 w-5 shrink-0" />
-            {!collapsed && <span>Paramètres</span>}
-          </Link>
           <button
             onClick={signOut}
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-muted transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"

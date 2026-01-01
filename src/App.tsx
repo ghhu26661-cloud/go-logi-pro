@@ -5,8 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { RoleBasedRoute } from "@/components/auth/RoleBasedRoute";
 import { AppLayout } from "@/components/layout/AppLayout";
-import Dashboard from "./pages/Dashboard";
+import RoleRouter from "./pages/RoleRouter";
 import Auth from "./pages/Auth";
 import Clients from "./pages/Clients";
 import Orders from "./pages/Orders";
@@ -26,6 +27,24 @@ const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => (
   </ProtectedRoute>
 );
 
+// Staff-only layout (admin + manager)
+const StaffLayout = ({ children }: { children: React.ReactNode }) => (
+  <ProtectedRoute>
+    <RoleBasedRoute allowedRoles={["admin", "manager"]}>
+      <AppLayout>{children}</AppLayout>
+    </RoleBasedRoute>
+  </ProtectedRoute>
+);
+
+// Admin-only layout
+const AdminLayout = ({ children }: { children: React.ReactNode }) => (
+  <ProtectedRoute>
+    <RoleBasedRoute allowedRoles={["admin"]}>
+      <AppLayout>{children}</AppLayout>
+    </RoleBasedRoute>
+  </ProtectedRoute>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -37,15 +56,19 @@ const App = () => (
             {/* Public routes */}
             <Route path="/auth" element={<Auth />} />
             
-            {/* Protected routes with layout */}
-            <Route path="/" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
-            <Route path="/clients" element={<AuthenticatedLayout><Clients /></AuthenticatedLayout>} />
-            <Route path="/orders" element={<AuthenticatedLayout><Orders /></AuthenticatedLayout>} />
-            <Route path="/deliveries" element={<AuthenticatedLayout><Deliveries /></AuthenticatedLayout>} />
-            <Route path="/drivers" element={<AuthenticatedLayout><Drivers /></AuthenticatedLayout>} />
-            <Route path="/vehicles" element={<AuthenticatedLayout><Vehicles /></AuthenticatedLayout>} />
-            <Route path="/invoices" element={<AuthenticatedLayout><Invoices /></AuthenticatedLayout>} />
-            <Route path="/users" element={<AuthenticatedLayout><Users /></AuthenticatedLayout>} />
+            {/* Role-based dashboard */}
+            <Route path="/" element={<AuthenticatedLayout><RoleRouter /></AuthenticatedLayout>} />
+            
+            {/* Staff-only routes (admin + manager) */}
+            <Route path="/clients" element={<StaffLayout><Clients /></StaffLayout>} />
+            <Route path="/orders" element={<StaffLayout><Orders /></StaffLayout>} />
+            <Route path="/deliveries" element={<StaffLayout><Deliveries /></StaffLayout>} />
+            <Route path="/drivers" element={<StaffLayout><Drivers /></StaffLayout>} />
+            <Route path="/vehicles" element={<StaffLayout><Vehicles /></StaffLayout>} />
+            <Route path="/invoices" element={<StaffLayout><Invoices /></StaffLayout>} />
+            
+            {/* Admin-only routes */}
+            <Route path="/users" element={<AdminLayout><Users /></AdminLayout>} />
             
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
