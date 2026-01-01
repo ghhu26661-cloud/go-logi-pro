@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       toast.success("Connexion réussie !");
-      navigate("/");
+      navigate("/dashboard");
       return { error: null };
     } catch (error) {
       const err = error as Error;
@@ -99,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       toast.success("Compte créé avec succès ! Vous êtes maintenant connecté.");
-      navigate("/");
+      navigate("/dashboard");
       return { error: null };
     } catch (error) {
       const err = error as Error;
