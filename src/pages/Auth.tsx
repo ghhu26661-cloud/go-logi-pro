@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
 import { z } from "zod";
+import deliveryTruckImg from "@/assets/delivery-truck.png";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -263,6 +264,80 @@ export default function Auth() {
               {isLogin ? "S'inscrire" : "Se connecter"}
             </button>
           </p>
+
+          {/* Demo Accounts */}
+          {isLogin && (
+            <div className="mt-6 rounded-lg border border-border bg-muted/50 p-4">
+              <p className="mb-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                Comptes de démonstration
+              </p>
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between rounded-md bg-background px-3 py-2">
+                  <div>
+                    <span className="font-medium text-foreground">Admin</span>
+                    <span className="ml-2 text-muted-foreground">admin@logitrack.com</span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 text-xs"
+                    onClick={() => setFormData({ ...formData, email: "admin@logitrack.com", password: "demo123456" })}
+                  >
+                    Utiliser
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between rounded-md bg-background px-3 py-2">
+                  <div>
+                    <span className="font-medium text-foreground">Manager</span>
+                    <span className="ml-2 text-muted-foreground">manager@logitrack.com</span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 text-xs"
+                    onClick={() => setFormData({ ...formData, email: "manager@logitrack.com", password: "demo123456" })}
+                  >
+                    Utiliser
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between rounded-md bg-background px-3 py-2">
+                  <div>
+                    <span className="font-medium text-foreground">Chauffeur</span>
+                    <span className="ml-2 text-muted-foreground">chauffeur@logitrack.com</span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 text-xs"
+                    onClick={() => setFormData({ ...formData, email: "chauffeur@logitrack.com", password: "demo123456" })}
+                  >
+                    Utiliser
+                  </Button>
+                </div>
+                <div className="flex items-center justify-between rounded-md bg-background px-3 py-2">
+                  <div>
+                    <span className="font-medium text-foreground">Client</span>
+                    <span className="ml-2 text-muted-foreground">client@logitrack.com</span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-6 text-xs"
+                    onClick={() => setFormData({ ...formData, email: "client@logitrack.com", password: "demo123456" })}
+                  >
+                    Utiliser
+                  </Button>
+                </div>
+              </div>
+              <p className="mt-3 text-[10px] text-muted-foreground">
+                Mot de passe: <code className="rounded bg-muted px-1.5 py-0.5 font-mono">demo123456</code>
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -270,8 +345,12 @@ export default function Auth() {
       <div className="hidden lg:block lg:w-1/2">
         <div className="relative flex h-full items-center justify-center gradient-hero p-12">
           <div className="relative z-10 max-w-lg text-center">
-            <div className="mb-8 inline-flex items-center justify-center rounded-2xl bg-primary/20 p-4">
-              <TruckIcon className="h-16 w-16 text-primary-foreground" />
+            <div className="mb-8 inline-flex items-center justify-center">
+              <img 
+                src={deliveryTruckImg} 
+                alt="Camion de livraison" 
+                className="h-40 w-40 object-contain drop-shadow-2xl"
+              />
             </div>
             <h2 className="mb-4 text-4xl font-bold text-primary-foreground">
               Gérez votre logistique efficacement
@@ -313,16 +392,27 @@ function TruckIcon({ className }: { className?: string }) {
     <svg
       className={className}
       viewBox="0 0 24 24"
-      fill="none"
+      fill="currentColor"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="0.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M10 17h4V5H2v12h3" />
-      <path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1" />
-      <circle cx="7.5" cy="17.5" r="2.5" />
-      <circle cx="17.5" cy="17.5" r="2.5" />
+      {/* Truck body */}
+      <rect x="1" y="6" width="13" height="10" rx="1" fill="currentColor" opacity="0.9" />
+      {/* Cabin */}
+      <path d="M14 8h4l3 4v4h-7V8z" fill="currentColor" opacity="0.8" />
+      {/* Window */}
+      <path d="M15 9h2.5l2 2.5H15V9z" fill="currentColor" opacity="0.3" />
+      {/* Front wheel */}
+      <circle cx="5" cy="17" r="2.5" fill="currentColor" opacity="0.7" />
+      <circle cx="5" cy="17" r="1" fill="currentColor" opacity="0.3" />
+      {/* Back wheel */}
+      <circle cx="17" cy="17" r="2.5" fill="currentColor" opacity="0.7" />
+      <circle cx="17" cy="17" r="1" fill="currentColor" opacity="0.3" />
+      {/* Package line */}
+      <rect x="3" y="9" width="4" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
+      <rect x="8" y="9" width="4" height="3" rx="0.5" fill="currentColor" opacity="0.4" />
     </svg>
   );
 }

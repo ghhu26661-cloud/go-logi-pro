@@ -1,4 +1,4 @@
-import { Bell, Search, User, LogOut } from "lucide-react";
+import { Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +12,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/useAuth";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 interface AppHeaderProps {
   sidebarCollapsed: boolean;
@@ -60,14 +61,7 @@ export function AppHeader({ sidebarCollapsed }: AppHeaderProps) {
         <ThemeToggle />
 
         {/* Notifications */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="relative h-9 w-9 text-muted-foreground hover:bg-muted hover:text-foreground"
-        >
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive" />
-        </Button>
+        <NotificationBell />
 
         {/* User Menu */}
         <DropdownMenu>
