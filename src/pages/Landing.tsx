@@ -8,13 +8,13 @@ import {
   Clock, 
   Shield, 
   BarChart3,
-  CheckCircle2,
   Star,
-  Users,
   Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const features = [
   {
@@ -80,16 +80,68 @@ const testimonials = [
   },
 ];
 
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { opacity: 1, y: 0 }
+};
+
+const fadeInLeft = {
+  hidden: { opacity: 0, x: -60 },
+  visible: { opacity: 1, x: 0 }
+};
+
+const fadeInRight = {
+  hidden: { opacity: 0, x: 60 },
+  visible: { opacity: 1, x: 0 }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1 }
+};
+
 export default function Landing() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const bgY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Navigation */}
-      <nav className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
+      <motion.nav 
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="fixed top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl"
+      >
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25">
+            <motion.div 
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/25"
+            >
               <Boxes className="h-5 w-5 text-primary-foreground" />
-            </div>
+            </motion.div>
             <span className="text-xl font-bold text-foreground">LogiTrack Pro</span>
           </Link>
           
@@ -101,129 +153,290 @@ export default function Landing() {
               </Button>
             </Link>
             <Link to="/auth">
-              <Button className="gap-2 bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all">
-                Commencer
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button className="gap-2 bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all">
+                  Commencer
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </motion.div>
             </Link>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-20">
-        {/* Background effects */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/20 blur-[120px]" />
-          <div className="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-accent/20 blur-[120px]" />
+      <section ref={heroRef} className="relative overflow-hidden pt-32 pb-20 min-h-screen flex items-center">
+        {/* Parallax Background effects */}
+        <motion.div 
+          className="absolute inset-0 -z-10"
+          style={{ y: bgY, scale: bgScale }}
+        >
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="absolute top-0 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/20 blur-[120px]" 
+          />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5, delay: 0.3, ease: "easeOut" }}
+            className="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-accent/20 blur-[120px]" 
+          />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
-        </div>
+        </motion.div>
 
-        <div className="container mx-auto px-4">
+        <motion.div 
+          className="container mx-auto px-4"
+          style={{ y: heroY, opacity: heroOpacity }}
+        >
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary">
-              <Zap className="h-4 w-4" />
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                <Zap className="h-4 w-4" />
+              </motion.div>
               <span>La nouvelle génération de gestion logistique</span>
-            </div>
+            </motion.div>
             
-            <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <motion.h1 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+            >
               Gérez votre logistique avec{" "}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <motion.span 
+                initial={{ backgroundPosition: "0% 50%" }}
+                animate={{ backgroundPosition: "100% 50%" }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+                className="bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto] bg-clip-text text-transparent"
+              >
                 précision
-              </span>
-            </h1>
+              </motion.span>
+            </motion.h1>
             
-            <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+            <motion.p 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground sm:text-xl"
+            >
               LogiTrack Pro simplifie la gestion de vos livraisons, commandes et véhicules. 
               Une solution tout-en-un pour optimiser vos opérations logistiques.
-            </p>
+            </motion.p>
             
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+              className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+            >
               <Link to="/auth">
-                <Button size="lg" className="h-12 gap-2 px-8 text-base bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all">
-                  Démarrer gratuitement
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button size="lg" className="h-12 gap-2 px-8 text-base bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all">
+                    Démarrer gratuitement
+                    <motion.div
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      <ArrowRight className="h-5 w-5" />
+                    </motion.div>
+                  </Button>
+                </motion.div>
               </Link>
-              <Button size="lg" variant="outline" className="h-12 px-8 text-base">
-                Voir la démo
-              </Button>
-            </div>
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button size="lg" variant="outline" className="h-12 px-8 text-base">
+                  Voir la démo
+                </Button>
+              </motion.div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="flex flex-col items-center gap-2 text-muted-foreground"
+          >
+            <span className="text-xs uppercase tracking-wider">Scroll</span>
+            <div className="h-10 w-6 rounded-full border-2 border-muted-foreground/30 flex justify-center pt-2">
+              <motion.div
+                animate={{ y: [0, 12, 0], opacity: [1, 0.3, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-1 h-2 bg-muted-foreground rounded-full"
+              />
+            </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Stats Section */}
       <section className="border-y border-border bg-card/50 py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+          <motion.div 
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="grid grid-cols-2 gap-8 md:grid-cols-4"
+          >
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl font-bold text-foreground sm:text-4xl">{stat.value}</div>
+              <motion.div 
+                key={index} 
+                variants={scaleIn}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+              >
+                <motion.div 
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ type: "spring", stiffness: 200, delay: index * 0.1 }}
+                  className="text-3xl font-bold text-foreground sm:text-4xl"
+                >
+                  {stat.value}
+                </motion.div>
                 <div className="mt-1 text-sm text-muted-foreground">{stat.label}</div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+            className="mx-auto mb-16 max-w-2xl text-center"
+          >
             <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
               Tout ce dont vous avez besoin
             </h2>
             <p className="text-lg text-muted-foreground">
               Une plateforme complète pour gérer tous les aspects de votre chaîne logistique.
             </p>
-          </div>
+          </motion.div>
           
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.div 
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {features.map((feature, index) => (
-              <div
+              <motion.div
                 key={index}
+                variants={index % 2 === 0 ? fadeInLeft : fadeInRight}
+                transition={{ duration: 0.5 }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
                 className="group rounded-2xl border border-border bg-card p-6 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5"
               >
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                <motion.div 
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"
+                >
                   <feature.icon className="h-6 w-6" />
-                </div>
+                </motion.div>
                 <h3 className="mb-2 text-lg font-semibold text-foreground">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.description}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="border-t border-border bg-card/30 py-20">
+      <section className="border-t border-border bg-card/30 py-20 overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="mx-auto mb-16 max-w-2xl text-center">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+            className="mx-auto mb-16 max-w-2xl text-center"
+          >
             <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
               Ils nous font confiance
             </h2>
             <p className="text-lg text-muted-foreground">
               Découvrez pourquoi des centaines d'entreprises ont choisi LogiTrack Pro.
             </p>
-          </div>
+          </motion.div>
           
-          <div className="grid gap-8 md:grid-cols-3">
+          <motion.div 
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid gap-8 md:grid-cols-3"
+          >
             {testimonials.map((testimonial, index) => (
-              <div
+              <motion.div
                 key={index}
+                variants={fadeInUp}
+                transition={{ duration: 0.5 }}
+                whileHover={{ 
+                  y: -10, 
+                  boxShadow: "0 20px 40px -20px hsl(var(--primary) / 0.3)",
+                  transition: { duration: 0.2 } 
+                }}
                 className="rounded-2xl border border-border bg-card p-6"
               >
-                <div className="mb-4 flex gap-1">
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className="mb-4 flex gap-1"
+                >
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-warning text-warning" />
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, scale: 0 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 + i * 0.1 }}
+                    >
+                      <Star className="h-5 w-5 fill-warning text-warning" />
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
                 <p className="mb-6 text-foreground">&ldquo;{testimonial.content}&rdquo;</p>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold">
+                  <motion.div 
+                    whileHover={{ scale: 1.1 }}
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold"
+                  >
                     {testimonial.name.charAt(0)}
-                  </div>
+                  </motion.div>
                   <div>
                     <div className="font-medium text-foreground">{testimonial.name}</div>
                     <div className="text-sm text-muted-foreground">
@@ -231,58 +444,114 @@ export default function Landing() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="relative overflow-hidden py-20">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10" />
-        </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="absolute inset-0 -z-10"
+        >
+          <motion.div 
+            animate={{ 
+              background: [
+                "linear-gradient(135deg, hsl(var(--primary) / 0.1) 0%, hsl(var(--accent) / 0.1) 100%)",
+                "linear-gradient(135deg, hsl(var(--accent) / 0.1) 0%, hsl(var(--primary) / 0.1) 100%)",
+              ]
+            }}
+            transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
+            className="absolute inset-0" 
+          />
+        </motion.div>
         
         <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl text-center">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+            transition={{ duration: 0.6 }}
+            className="mx-auto max-w-3xl text-center"
+          >
             <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
               Prêt à optimiser votre logistique ?
             </h2>
             <p className="mb-8 text-lg text-muted-foreground">
               Rejoignez des centaines d'entreprises qui font confiance à LogiTrack Pro pour gérer leurs opérations.
             </p>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <motion.div 
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+            >
               <Link to="/auth">
-                <Button size="lg" className="h-12 gap-2 px-8 text-base bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/25">
-                  Créer un compte gratuit
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
+                <motion.div
+                  variants={scaleIn}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button size="lg" className="h-12 gap-2 px-8 text-base bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/25">
+                    Créer un compte gratuit
+                    <ArrowRight className="h-5 w-5" />
+                  </Button>
+                </motion.div>
               </Link>
               <Link to="/auth">
-                <Button size="lg" variant="outline" className="h-12 px-8 text-base">
-                  Contacter les ventes
-                </Button>
+                <motion.div
+                  variants={scaleIn}
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button size="lg" variant="outline" className="h-12 px-8 text-base">
+                    Contacter les ventes
+                  </Button>
+                </motion.div>
               </Link>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border bg-card py-12">
+      <motion.footer 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="border-t border-border bg-card py-12"
+      >
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <div className="flex items-center gap-3">
+            <motion.div 
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-3"
+            >
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80">
                 <Boxes className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="text-lg font-bold text-foreground">LogiTrack Pro</span>
-            </div>
+            </motion.div>
             
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-foreground transition-colors">Confidentialité</a>
-              <a href="#" className="hover:text-foreground transition-colors">Conditions</a>
-              <a href="#" className="hover:text-foreground transition-colors">Contact</a>
+              {["Confidentialité", "Conditions", "Contact"].map((item, index) => (
+                <motion.a 
+                  key={item}
+                  href="#" 
+                  whileHover={{ y: -2, color: "hsl(var(--foreground))" }}
+                  className="hover:text-foreground transition-colors"
+                >
+                  {item}
+                </motion.a>
+              ))}
             </div>
             
             <p className="text-sm text-muted-foreground">
@@ -290,7 +559,7 @@ export default function Landing() {
             </p>
           </div>
         </div>
-      </footer>
+      </motion.footer>
     </div>
   );
 }
