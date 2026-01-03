@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { Boxes, Eye, EyeOff, Mail, Lock, ArrowRight, User, Loader2, Building2, Truck, Sparkles } from "lucide-react";
+import { Boxes, Eye, EyeOff, Mail, Lock, ArrowRight, User, Loader2, Building2, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,7 +29,6 @@ export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSeeding, setIsSeeding] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,39 +36,6 @@ export default function Auth() {
     role: "client" as UserRole,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const seedDemoAccounts = async () => {
-    setIsSeeding(true);
-    try {
-      const token = prompt("Entrez le token de seed (DEMO_SEED_TOKEN):");
-      if (!token) {
-        setIsSeeding(false);
-        return;
-      }
-
-      const { data, error } = await supabase.functions.invoke('seed-demo-accounts', {
-        body: { token }
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Comptes démo créés",
-        description: `${data.results?.filter((r: { success: boolean }) => r.success).length || 0} comptes créés avec succès`,
-      });
-
-      console.log("Seed results:", data);
-    } catch (error) {
-      console.error("Seed error:", error);
-      toast({
-        title: "Erreur",
-        description: error instanceof Error ? error.message : "Erreur lors de la création des comptes",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSeeding(false);
-    }
-  };
   if (user && !loading) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -371,21 +337,6 @@ export default function Auth() {
               <p className="mt-3 text-[10px] text-muted-foreground">
                 Mot de passe: <code className="rounded bg-muted px-1.5 py-0.5 font-mono">demo123456</code>
               </p>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="mt-3 w-full gap-2 text-xs"
-                onClick={seedDemoAccounts}
-                disabled={isSeeding}
-              >
-                {isSeeding ? (
-                  <Loader2 className="h-3 w-3 animate-spin" />
-                ) : (
-                  <Sparkles className="h-3 w-3" />
-                )}
-                {isSeeding ? "Création..." : "Créer les comptes démo"}
-              </Button>
             </div>
           )}
         </div>
