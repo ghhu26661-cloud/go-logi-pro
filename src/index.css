@@ -7,30 +7,30 @@
 @import "@fontsource/plus-jakarta-sans/600.css";
 @import "@fontsource/plus-jakarta-sans/700.css";
 
-/* LogiTrack Pro Professional Design System */
+/* LogiTrack Pro - Orange & Dark Theme */
 
 @layer base {
   :root {
-    /* Light Mode - Clean & Professional */
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
+    /* Light Mode - Clean with Orange accents */
+    --background: 30 10% 98%;
+    --foreground: 20 14% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 20 14% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 20 14% 10%;
 
-    --primary: 217 91% 50%;
+    --primary: 24 95% 53%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 30 15% 95%;
+    --secondary-foreground: 20 14% 10%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 30 15% 95%;
+    --muted-foreground: 20 9% 45%;
 
-    --accent: 173 58% 39%;
+    --accent: 20 90% 48%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -45,45 +45,45 @@
     --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 217 91% 50%;
+    --border: 30 13% 88%;
+    --input: 30 13% 88%;
+    --ring: 24 95% 53%;
 
     --radius: 0.75rem;
 
-    /* Sidebar - Dark in light mode for contrast */
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 60%;
+    /* Sidebar - Dark for contrast */
+    --sidebar-background: 20 14% 8%;
+    --sidebar-foreground: 30 20% 98%;
+    --sidebar-primary: 24 95% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 217 91% 60%;
-    --sidebar-muted: 215 16% 57%;
+    --sidebar-accent: 20 20% 15%;
+    --sidebar-accent-foreground: 30 20% 98%;
+    --sidebar-border: 20 20% 15%;
+    --sidebar-ring: 24 95% 58%;
+    --sidebar-muted: 20 10% 55%;
   }
 
   .dark {
-    /* Dark Mode - Modern & Sleek */
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
+    /* Dark Mode - Deep & Bold with Orange */
+    --background: 20 14% 4%;
+    --foreground: 30 20% 98%;
 
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 20 14% 7%;
+    --card-foreground: 30 20% 98%;
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 20 14% 7%;
+    --popover-foreground: 30 20% 98%;
 
-    --primary: 217 91% 60%;
+    --primary: 24 95% 53%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 217 33% 12%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 20 20% 12%;
+    --secondary-foreground: 30 20% 98%;
 
-    --muted: 217 33% 12%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 20 20% 12%;
+    --muted-foreground: 20 15% 60%;
 
-    --accent: 173 58% 45%;
+    --accent: 20 90% 55%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -98,19 +98,19 @@
     --info: 199 89% 48%;
     --info-foreground: 0 0% 100%;
 
-    --border: 217 33% 15%;
-    --input: 217 33% 15%;
-    --ring: 217 91% 60%;
+    --border: 20 20% 15%;
+    --input: 20 20% 15%;
+    --ring: 24 95% 53%;
 
-    --sidebar-background: 222 47% 5%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 60%;
+    --sidebar-background: 20 14% 3%;
+    --sidebar-foreground: 30 20% 98%;
+    --sidebar-primary: 24 95% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 33% 10%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 10%;
-    --sidebar-ring: 217 91% 60%;
-    --sidebar-muted: 215 16% 50%;
+    --sidebar-accent: 20 20% 10%;
+    --sidebar-accent-foreground: 30 20% 98%;
+    --sidebar-border: 20 20% 10%;
+    --sidebar-ring: 24 95% 58%;
+    --sidebar-muted: 20 12% 50%;
   }
 }
 
@@ -131,19 +131,19 @@
 
 @layer utilities {
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(217 91% 65%));
+    background: linear-gradient(135deg, hsl(24 95% 53%), hsl(20 90% 48%));
   }
   
   .gradient-accent {
-    background: linear-gradient(135deg, hsl(var(--accent)), hsl(173 58% 50%));
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(30 95% 55%));
   }
   
   .gradient-hero {
-    background: linear-gradient(135deg, hsl(222 47% 11%), hsl(217 91% 25%));
+    background: linear-gradient(135deg, hsl(20 14% 8%), hsl(24 40% 15%));
   }
 
   .gradient-dark {
-    background: linear-gradient(180deg, hsl(222 47% 8%) 0%, hsl(222 47% 4%) 100%);
+    background: linear-gradient(180deg, hsl(20 14% 6%) 0%, hsl(20 14% 2%) 100%);
   }
 
   .shadow-card {
@@ -157,11 +157,11 @@
   }
 
   .shadow-glow {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.25);
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.35);
   }
 
   .shadow-glow-lg {
-    box-shadow: 0 0 40px hsl(var(--primary) / 0.3);
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.4);
   }
 
   .animate-fade-in {
