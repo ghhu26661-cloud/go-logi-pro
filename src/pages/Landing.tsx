@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import heroTruck from "@/assets/hero-truck.jpg";
 
 const features = [
   {
@@ -166,11 +167,17 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section ref={heroRef} className="relative overflow-hidden pt-32 pb-20 min-h-screen flex items-center">
-        {/* Parallax Background effects */}
+        {/* Hero Background Image */}
         <motion.div 
           className="absolute inset-0 -z-10"
           style={{ y: bgY, scale: bgScale }}
         >
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${heroTruck})` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50" />
           <motion.div 
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -183,7 +190,6 @@ export default function Landing() {
             transition={{ duration: 1.5, delay: 0.3, ease: "easeOut" }}
             className="absolute bottom-0 right-1/4 h-[400px] w-[400px] rounded-full bg-accent/20 blur-[120px]" 
           />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
         </motion.div>
 
         <motion.div 

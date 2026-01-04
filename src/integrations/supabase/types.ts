@@ -155,6 +155,13 @@ export type Database = {
             referencedRelation: "orders"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "fk_deliveries_vehicle"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       notifications: {
@@ -305,6 +312,63 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          brand: string
+          capacity_kg: number | null
+          capacity_m3: number | null
+          created_at: string
+          fuel_type: string | null
+          id: string
+          last_maintenance_date: string | null
+          mileage_km: number | null
+          model: string
+          next_maintenance_date: string | null
+          notes: string | null
+          registration_number: string
+          status: string
+          type: string
+          updated_at: string
+          year: number | null
+        }
+        Insert: {
+          brand: string
+          capacity_kg?: number | null
+          capacity_m3?: number | null
+          created_at?: string
+          fuel_type?: string | null
+          id?: string
+          last_maintenance_date?: string | null
+          mileage_km?: number | null
+          model: string
+          next_maintenance_date?: string | null
+          notes?: string | null
+          registration_number: string
+          status?: string
+          type?: string
+          updated_at?: string
+          year?: number | null
+        }
+        Update: {
+          brand?: string
+          capacity_kg?: number | null
+          capacity_m3?: number | null
+          created_at?: string
+          fuel_type?: string | null
+          id?: string
+          last_maintenance_date?: string | null
+          mileage_km?: number | null
+          model?: string
+          next_maintenance_date?: string | null
+          notes?: string | null
+          registration_number?: string
+          status?: string
+          type?: string
+          updated_at?: string
+          year?: number | null
         }
         Relationships: []
       }
