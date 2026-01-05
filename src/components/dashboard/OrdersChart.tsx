@@ -8,17 +8,45 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-
-const data = [
-  { month: "Jan", livrees: 120, enCours: 45, annulees: 12 },
-  { month: "Fév", livrees: 135, enCours: 52, annulees: 8 },
-  { month: "Mar", livrees: 142, enCours: 38, annulees: 15 },
-  { month: "Avr", livrees: 158, enCours: 61, annulees: 10 },
-  { month: "Mai", livrees: 165, enCours: 48, annulees: 7 },
-  { month: "Jun", livrees: 178, enCours: 55, annulees: 11 },
-];
+import { useMonthlyOrderStats } from "@/hooks/useDashboardStats";
+import { Loader2 } from "lucide-react";
 
 export function OrdersChart() {
+  const { data, isLoading, error } = useMonthlyOrderStats();
+
+  if (isLoading) {
+    return (
+      <div className="animate-slide-up rounded-xl border border-border bg-card p-6 shadow-card" style={{ animationDelay: "300ms" }}>
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-card-foreground">
+            Statut des commandes
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            Répartition mensuelle par statut
+          </p>
+        </div>
+        <div className="h-[300px] flex items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="animate-slide-up rounded-xl border border-border bg-card p-6 shadow-card" style={{ animationDelay: "300ms" }}>
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-card-foreground">
+            Statut des commandes
+          </h3>
+        </div>
+        <div className="h-[300px] flex items-center justify-center text-destructive">
+          Erreur lors du chargement
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="animate-slide-up rounded-xl border border-border bg-card p-6 shadow-card" style={{ animationDelay: "300ms" }}>
       <div className="mb-6">
@@ -32,24 +60,24 @@ export function OrdersChart() {
       <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(214, 32%, 91%)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="month"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "hsl(215, 16%, 47%)", fontSize: 12 }}
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "hsl(215, 16%, 47%)", fontSize: 12 }}
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(0, 0%, 100%)",
-                border: "1px solid hsl(214, 32%, 91%)",
+                backgroundColor: "hsl(var(--card))",
+                border: "1px solid hsl(var(--border))",
                 borderRadius: "8px",
-                boxShadow: "0 4px 6px -1px hsl(222 47% 11% / 0.1)",
+                boxShadow: "0 4px 6px -1px hsl(var(--foreground) / 0.1)",
               }}
             />
             <Legend />
@@ -62,7 +90,7 @@ export function OrdersChart() {
             <Bar
               dataKey="enCours"
               name="En cours"
-              fill="hsl(38, 92%, 50%)"
+              fill="hsl(24, 95%, 53%)"
               radius={[4, 4, 0, 0]}
             />
             <Bar
